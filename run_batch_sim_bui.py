@@ -1,26 +1,27 @@
-# Replace varaibles in .dck and/or .bui files with values we want to Replace
+# Replace varaibles in .dck and/or .bui files with values we want to simulate
 # Create new deck files and then launch Trnsys for simulation
 
 import os
 import shutil
 import subprocess
+import glob
 
 # Specify the path to the directory containing the template deck file
 # and template building file.
-trnsysFilesPath = r'C:\Trnsys17\MyProjects\PythonEx3'
+trnsysFilesPath = r'C:\TRNSYS18\MyProjects\eSim'
 # Change directory.
 os.chdir(trnsysFilesPath)
 # Join template bui filename to path.
-template_buifilename = os.path.join(trnsysFilesPath,'Template.bui')
+template_buifilename = os.path.join(trnsysFilesPath,'Behouse_temp.b17')
 # Calculate a 25% glazing fraction
 windowArea = 100
 glazingFraction = 0.25*windowArea
 # Open a temporary file for writing.
-tempfilename = r'C:\Trnsys17\MyProjects\PythonEx3\temp.txt'
+tempfilename = r'C:\TRNSYS18\MyProjects\eSim\temp.txt'
 tempFile = open(tempfilename, 'w')
 # Open the template file
 templateFile = open(template_buifilename, 'r')
-# itterate over each line in the template file
+# iterate over each line in the template file
 for line in templateFile:
         # Replace '%FFRAME%' with variable (if '%FFRAME% is found)
         line = line.replace('%FFRAME%', str(glazingFraction))
@@ -54,13 +55,8 @@ templateFile.close()
 # Copy the temporary file over the template file
 shutil.copyfile(tempfilename, template_dckfilename)
 
-# Specify the path to the directory containing the deck files to run in batch 
-trnsysFilesPath = r'C:\Trnsys17\MyProjects\PythonEx1'
-# Change directory.
-os.chdir(trnsysFilesPath)
-# For loop: for every file containing the .dck file extension
 for file in glob.glob("*.dck"):
     # Add the path to the deck file
     deckfilename = os.path.join(trnsysFilesPath,file)
     # Run TRNSYS on the deckfile.
-    subprocess.call(["C:\Trnsys17\Exe\TRNExe.exe", deckfilename, '/n'])
+    subprocess.call(["C:\Trnsys\17-2-Bee\Exe\TRNExe", deckfilename, '/n'])
